@@ -189,32 +189,7 @@ export default function About() {
           ))}
         </div>
 
-        {/* Side progress — slim vertical track */}
-        <div className="absolute right-5 md:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-1 z-20">
-          {/* Track background */}
-          <div className="relative w-[2px] rounded-full overflow-hidden" style={{ height: `${cards.length * 20}px`, backgroundColor: "var(--border-subtle)" }}>
-            {/* Active fill */}
-            <div
-              className="absolute top-0 left-0 w-full rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{
-                height: `${((activeCard + 1) / cards.length) * 100}%`,
-                backgroundColor: "var(--text-secondary)",
-              }}
-            />
-          </div>
-          {/* Step labels — desktop only */}
-          <div className="hidden md:flex flex-col items-end gap-0" style={{ marginTop: "-" + `${cards.length * 20 + 4}px`, height: `${cards.length * 20}px`, justifyContent: "space-between" }}>
-            {cards.map((card, i) => (
-              <span
-                key={i}
-                className="text-[9px] font-semibold tracking-widest uppercase transition-colors duration-300 pr-4"
-                style={{ color: activeCard === i ? "var(--text-secondary)" : "var(--text-muted)", opacity: activeCard === i ? 1 : 0.5 }}
-              >
-                {card.label}
-              </span>
-            ))}
-          </div>
-        </div>
+
       </div>
     </section>
   )
