@@ -9,7 +9,7 @@ export default function MigafinaProjectPage() {
   const data: ProjectPageData = language === "es"
     ? {
         title: "Migafina",
-        tagline: "Una experiencia de panadería digital diseñada para ||convertir||, deleitar y destacar.",
+        tagline: "Una experiencia de panadería digital diseñada para ||convertir, deleitar|| y destacar en cada detalle.",
         year: "2024",
         role: "Full-Stack Developer",
         category: "Plataforma E-commerce",
@@ -42,10 +42,29 @@ export default function MigafinaProjectPage() {
         labelBack: "Volver al Inicio",
         labelVisit: "Ver Sitio en Vivo",
         labelCode: "Ver Código",
+        marqueeText: "Hornear con pasión ✻ Diseñar con propósito ✻ Crear experiencias únicas",
+        services: [
+          {
+            title: "Diseño de Producto",
+            items: ["UI/UX Design", "Branding visual", "Fotografía de producto"],
+          },
+          {
+            title: "Desarrollo Web",
+            items: ["Frontend responsive", "Integración de pagos", "CMS personalizado"],
+          },
+          {
+            title: "E-commerce",
+            items: ["Carrito optimizado", "Checkout simplificado", "Gestión de pedidos"],
+          },
+          {
+            title: "Performance",
+            items: ["SEO técnico", "Core Web Vitals", "Optimización de imágenes"],
+          },
+        ],
       }
     : {
         title: "Migafina",
-        tagline: "A digital bakery experience built to ||convert||, delight, and stand out.",
+        tagline: "A digital bakery experience built to ||convert, delight|| and stand out in every detail.",
         year: "2024",
         role: "Full-Stack Developer",
         category: "E-commerce Platform",
@@ -78,6 +97,25 @@ export default function MigafinaProjectPage() {
         labelBack: "Back to Home",
         labelVisit: "Visit Live Site",
         labelCode: "View Code",
+        marqueeText: "Bake with passion ✻ Design with purpose ✻ Create unique experiences",
+        services: [
+          {
+            title: "Product Design",
+            items: ["UI/UX Design", "Visual branding", "Product photography"],
+          },
+          {
+            title: "Web Development",
+            items: ["Responsive frontend", "Payment integration", "Custom CMS"],
+          },
+          {
+            title: "E-commerce",
+            items: ["Optimized cart", "Simplified checkout", "Order management"],
+          },
+          {
+            title: "Performance",
+            items: ["Technical SEO", "Core Web Vitals", "Image optimization"],
+          },
+        ],
       }
 
   return <ProjectPageLayout data={data} />

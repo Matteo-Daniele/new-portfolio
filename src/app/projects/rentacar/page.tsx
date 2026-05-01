@@ -14,7 +14,7 @@ export default function RentacarProjectPage() {
         role: "Full-Stack Developer",
         category: "Aplicación Web",
         description:
-          "Rent a Car reinventa cómo las empresas gestionan su flota. Reservas automatizadas, supervisión en tiempo real y lógica de negocio compleja — todo en una interfaz limpia.",
+          "Rent a Car reinventa cómo las empresas gestionan su flota. Reservas automatizadas, supervisión en tiempo real y lógica de negocio compleja — todo en una interfaz limpia e intuitiva.",
         challenge: {
           heading: "El Reto",
           body: "Manejar lógica de negocio compleja: disponibilidad de vehículos, reservas solapadas, roles de usuario y reportes de flota — sin sacrificar la usabilidad.",
@@ -43,6 +43,25 @@ export default function RentacarProjectPage() {
         labelBack: "Volver al Inicio",
         labelVisit: "Ver Demo en Vivo",
         labelCode: "Código Fuente",
+        marqueeText: "Gestión inteligente ✻ Reservas automatizadas ✻ Control total de flota",
+        services: [
+          {
+            title: "Dashboard",
+            items: ["Vista de flota", "Métricas en tiempo real", "Alertas personalizadas"],
+          },
+          {
+            title: "Reservas",
+            items: ["Calendario interactivo", "Validación automática", "Conflictos resueltos"],
+          },
+          {
+            title: "Usuarios",
+            items: ["Roles y permisos", "Historial de acciones", "Multi-tenant"],
+          },
+          {
+            title: "Reportes",
+            items: ["Exportación de datos", "Gráficos dinámicos", "Filtros avanzados"],
+          },
+        ],
       }
     : {
         title: "Rent a Car",
@@ -80,6 +99,25 @@ export default function RentacarProjectPage() {
         labelBack: "Back to Home",
         labelVisit: "View Live Demo",
         labelCode: "Source Code",
+        marqueeText: "Smart management ✻ Automated bookings ✻ Total fleet control",
+        services: [
+          {
+            title: "Dashboard",
+            items: ["Fleet overview", "Real-time metrics", "Custom alerts"],
+          },
+          {
+            title: "Bookings",
+            items: ["Interactive calendar", "Auto validation", "Conflict resolution"],
+          },
+          {
+            title: "Users",
+            items: ["Roles & permissions", "Action history", "Multi-tenant"],
+          },
+          {
+            title: "Reports",
+            items: ["Data export", "Dynamic charts", "Advanced filters"],
+          },
+        ],
       }
 
   return <ProjectPageLayout data={data} />

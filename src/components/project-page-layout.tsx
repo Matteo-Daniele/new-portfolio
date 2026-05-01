@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/navbar"
 import { motion } from "framer-motion"
-import { ArrowLeft, ArrowRight, ExternalLink, Github } from "lucide-react"
+import { ArrowRight, ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -13,6 +13,11 @@ interface Tech {
 interface ProjectSection {
   heading: string
   body: string
+}
+
+interface ServiceCategory {
+  title: string
+  items: string[]
 }
 
 export interface ProjectPageData {
@@ -34,6 +39,8 @@ export interface ProjectPageData {
   labelBack: string
   labelVisit: string
   labelCode: string
+  marqueeText?: string
+  services?: ServiceCategory[]
 }
 
 interface Props {
@@ -45,70 +52,97 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+    transition: { delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   }),
 }
 
+// Curved text marquee component
+function CurvedMarquee({ text, speed = 20 }: { text: string; speed?: number }) {
+  const repeatedText = Array(6).fill(text).join(" ✻ ")
+  
+  return (
+    <div className="relative w-full overflow-hidden py-8">
+      {/* SVG path for the curve */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <defs>
+          <path
+            id="curvePath"
+            d="M 0,80 Q 300,20 600,60 T 1200,40"
+            fill="none"
+          />
+        </defs>
+      </svg>
+      
+      <motion.div
+        className="flex whitespace-nowrap"
+        animate={{ x: [0, -2000] }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: speed,
+            ease: "linear",
+          },
+        }}
+        style={{
+          transform: "rotate(-2deg)",
+        }}
+      >
+        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]/90 tracking-tight">
+          {repeatedText}
+        </span>
+        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]/90 tracking-tight ml-8">
+          {repeatedText}
+        </span>
+      </motion.div>
+    </div>
+  )
+}
+
 export default function ProjectPageLayout({ data }: Props) {
+  const marqueeText = data.marqueeText || `We help you realize your potential`
+  
+  const defaultServices: ServiceCategory[] = data.services || [
+    {
+      title: "General Design",
+      items: ["Product design", "Brand design", "UI design"],
+    },
+    {
+      title: "Data & Analytics",
+      items: ["Performance reporting", "Market data sharing", "Conversion optimization"],
+    },
+    {
+      title: "SEO Optimization",
+      items: ["Technical optimization", "Content optimization", "Keyword research"],
+    },
+    {
+      title: "Digital Advertising",
+      items: ["Social media", "Optimization and reporting"],
+    },
+  ]
+
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#FBE8C5] text-[#2B3E4C]">
+      <main 
+        className="min-h-screen text-[#1a1a1a]"
+        style={{
+          background: "linear-gradient(180deg, #9B3DDF 0%, #C44D99 25%, #E8A066 60%, #F5C84C 100%)",
+        }}
+      >
 
-        {/* ── Hero ── */}
-        <section className="relative min-h-screen flex flex-col justify-between pt-28 pb-16 px-6 md:px-14 lg:px-24 overflow-hidden">
-
-          {/* Top row: back link + meta */}
+        {/* ── Hero Section ── */}
+        <section className="relative pt-32 pb-16 px-6 md:px-14 lg:px-24">
+          
+          {/* Main headline with yellow underline */}
           <motion.div
             initial="hidden"
             animate="visible"
             custom={0}
             variants={fadeUp}
-            className="flex items-center justify-between"
+            className="max-w-4xl mx-auto"
           >
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.25em] uppercase text-[#2B3E4C]/50 hover:text-[#2B3E4C] transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {data.labelBack}
-            </Link>
-            <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#2B3E4C]/40">
-              {data.year}
-            </span>
-          </motion.div>
-
-          {/* Giant title */}
-          <div className="mt-12">
-            <motion.p
-              initial="hidden"
-              animate="visible"
-              custom={1}
-              variants={fadeUp}
-              className="text-[11px] font-bold tracking-[0.3em] uppercase mb-5"
-              style={{ color: data.accentColor }}
-            >
-              {data.category}
-            </motion.p>
-
-            <motion.h1
-              initial="hidden"
-              animate="visible"
-              custom={2}
-              variants={fadeUp}
-              className="font-display font-black text-[clamp(3.5rem,11vw,10rem)] leading-[0.9] tracking-tighter text-[#2B3E4C] text-balance mb-10"
-            >
-              {data.title}
-            </motion.h1>
-
-            {/* Underlined tagline — reference style */}
-            <motion.p
-              initial="hidden"
-              animate="visible"
-              custom={3}
-              variants={fadeUp}
-              className="text-2xl md:text-4xl font-bold leading-snug max-w-3xl text-[#2B3E4C]"
-            >
+            <h1 className="font-sans text-3xl md:text-5xl lg:text-6xl font-medium leading-tight text-[#1a1a1a]">
               {data.tagline.split("||").map((part, i) =>
                 i % 2 === 1 ? (
                   <span
@@ -116,9 +150,9 @@ export default function ProjectPageLayout({ data }: Props) {
                     className="relative inline"
                     style={{
                       textDecoration: "underline",
-                      textDecorationColor: data.accentColor,
-                      textDecorationThickness: "3px",
-                      textUnderlineOffset: "6px",
+                      textDecorationColor: "#F5C84C",
+                      textDecorationThickness: "4px",
+                      textUnderlineOffset: "8px",
                     }}
                   >
                     {part}
@@ -127,217 +161,285 @@ export default function ProjectPageLayout({ data }: Props) {
                   <span key={i}>{part}</span>
                 )
               )}
-            </motion.p>
-          </div>
+            </h1>
+          </motion.div>
 
-          {/* Bottom row: CTA buttons + role */}
+          {/* Hero image - pill shaped with rounded corners */}
           <motion.div
-            initial="hidden"
-            animate="visible"
-            custom={4}
-            variants={fadeUp}
-            className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-14"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-12 max-w-3xl mx-auto"
           >
-            <div className="flex flex-wrap gap-4">
-              <a
-                href={data.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-[11px] font-black uppercase tracking-[0.2em] bg-[#2B3E4C] text-[#FBE8C5] hover:scale-[1.03] transition-transform"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {data.labelVisit}
-              </a>
-              <a
-                href={data.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border border-[#2B3E4C]/25 text-[#2B3E4C] hover:bg-[#2B3E4C]/6 transition-colors"
-              >
-                <Github className="w-4 h-4" />
-                {data.labelCode}
-              </a>
+            <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden shadow-2xl">
+              <Image
+                src={data.heroImage}
+                alt={`${data.title} preview`}
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-            <p className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#2B3E4C]/40">
-              {data.role}
-            </p>
-          </motion.div>
-
-          {/* Decorative arrow — reference style */}
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.9, duration: 0.6 }}
-            className="absolute bottom-20 right-14 hidden lg:block"
-          >
-            <ArrowRight className="w-16 h-16 text-[#2B3E4C]/10" strokeWidth={1} />
           </motion.div>
         </section>
 
-        {/* ── Full-bleed hero image ── */}
-        <motion.section
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-          className="px-6 md:px-14 lg:px-24 mb-2"
-        >
-          <div className="relative w-full aspect-[16/8] rounded-2xl overflow-hidden bg-[#2B3E4C]/8">
-            <Image
-              src={data.heroImage}
-              alt={`${data.title} preview`}
-              fill
-              className="object-cover"
-              priority
-            />
+        {/* ── Asymmetric Images Section ── */}
+        <section className="px-6 md:px-14 lg:px-24 py-16">
+          <div className="flex flex-col md:flex-row items-start justify-center gap-8 md:gap-16">
+            
+            {/* Left image - offset up */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true }}
+              className="md:-mt-20"
+            >
+              <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
+                <Image
+                  src={data.heroImage}
+                  alt="Project detail 1"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-4 text-sm font-medium text-[#1a1a1a]/80 max-w-[250px]">
+                {data.challenge.body.slice(0, 80)}...
+              </p>
+            </motion.div>
+
+            {/* Right image - offset down */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true }}
+              className="md:mt-20"
+            >
+              <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
+                <Image
+                  src={data.detailImage}
+                  alt="Project detail 2"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-4 text-sm font-medium text-[#1a1a1a]/80 max-w-[250px]">
+                {data.approach.body.slice(0, 80)}...
+              </p>
+            </motion.div>
           </div>
-        </motion.section>
-
-        {/* ── Description strip — reference arrow + two-col style ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-20 flex flex-col md:flex-row md:items-start gap-10 md:gap-20 border-b border-[#2B3E4C]/10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0}
-            variants={fadeUp}
-            className="flex-shrink-0"
-          >
-            <ArrowRight
-              className="w-12 h-12 mt-1"
-              strokeWidth={1.5}
-              style={{ color: data.accentColor }}
-            />
-          </motion.div>
-          <motion.p
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={1}
-            variants={fadeUp}
-            className="text-2xl md:text-3xl font-bold leading-snug text-[#2B3E4C] max-w-2xl"
-          >
-            {data.description}
-          </motion.p>
         </section>
 
-        {/* ── Case study: 3 sections in two-col grid ── */}
+        {/* ── Curved Text Marquee ── */}
+        <section className="py-8 overflow-hidden">
+          <CurvedMarquee text={marqueeText} speed={25} />
+        </section>
+
+        {/* ── Description with Arrow ── */}
         <section className="px-6 md:px-14 lg:px-24 py-20">
-          <div className="grid md:grid-cols-3 gap-px bg-[#2B3E4C]/10">
-            {[data.challenge, data.approach, data.outcome].map((section, i) => (
-              <motion.div
-                key={section.heading}
+          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16 max-w-5xl mx-auto">
+            
+            {/* Arrow icon */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="flex-shrink-0"
+            >
+              <ArrowRight className="w-16 h-16 text-[#1a1a1a]/70" strokeWidth={1} />
+            </motion.div>
+
+            {/* Text content */}
+            <div className="flex-1">
+              <motion.h2
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                custom={i}
+                custom={0}
                 variants={fadeUp}
-                className="bg-[#FBE8C5] p-10"
+                className="text-2xl md:text-4xl font-medium leading-snug text-[#1a1a1a] mb-6"
               >
+                {data.description.split(".")[0]}.{" "}
                 <span
-                  className="block text-[10px] font-black tracking-[0.3em] uppercase mb-5"
-                  style={{ color: data.accentColor }}
+                  style={{
+                    textDecoration: "underline",
+                    textDecorationColor: "#F5C84C",
+                    textDecorationThickness: "3px",
+                    textUnderlineOffset: "6px",
+                  }}
                 >
-                  {String(i + 1).padStart(2, "0")}
+                  {data.description.split(".")[1]?.trim() || "Built to impress"}
                 </span>
-                <h3 className="font-display font-bold text-xl mb-4 text-[#2B3E4C]">
-                  {section.heading}
-                </h3>
-                <p className="text-[#2B3E4C]/70 leading-relaxed text-sm">
-                  {section.body}
+                .
+              </motion.h2>
+
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={1}
+                variants={fadeUp}
+                className="grid md:grid-cols-2 gap-6 mt-8"
+              >
+                <p className="text-sm text-[#1a1a1a]/70 leading-relaxed">
+                  {data.challenge.body}
+                </p>
+                <p className="text-sm text-[#1a1a1a]/70 leading-relaxed">
+                  {data.approach.body}
                 </p>
               </motion.div>
-            ))}
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+                className="mt-6"
+              >
+                <Link
+                  href={data.demoUrl}
+                  className="text-sm font-medium text-[#1a1a1a] underline underline-offset-4 hover:opacity-70 transition-opacity"
+                >
+                  Learn about how we work &rarr;
+                </Link>
+              </motion.div>
+            </div>
           </div>
         </section>
 
-        {/* ── Detail image + tech stack ── */}
-        <section className="px-6 md:px-14 lg:px-24 pb-24 grid md:grid-cols-2 gap-8 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true }}
-            className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#2B3E4C]/8"
-          >
-            <Image
-              src={data.detailImage}
-              alt={`${data.title} detail`}
-              fill
-              className="object-cover"
-            />
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0}
-            variants={fadeUp}
-            className="flex flex-col justify-center gap-6 pt-4"
-          >
-            <p
-              className="text-[11px] font-black tracking-[0.3em] uppercase"
-              style={{ color: data.accentColor }}
+        {/* ── Services / Tech Stack Section ── */}
+        <section className="px-6 md:px-14 lg:px-24 py-20">
+          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20 max-w-6xl mx-auto">
+            
+            {/* Left: Title with highlight */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              custom={0}
+              variants={fadeUp}
+              className="lg:w-1/2"
             >
-              Stack
-            </p>
-            <ul className="flex flex-col divide-y divide-[#2B3E4C]/10">
-              {data.tech.map((t, i) => (
-                <motion.li
-                  key={t.label}
-                  initial={{ opacity: 0, x: -8 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.4 }}
-                  viewport={{ once: true }}
-                  className="flex items-center justify-between py-4 text-sm font-semibold text-[#2B3E4C]"
+              <h2 className="text-3xl md:text-5xl font-medium leading-tight text-[#1a1a1a]">
+                {"We're obsessed with"}<br />
+                {"helping you reach your"}<br />
+                <span 
+                  className="inline-block px-2 py-1 mt-2"
+                  style={{ backgroundColor: "#F5C84C" }}
                 >
-                  {t.label}
-                  <ArrowRight className="w-4 h-4 text-[#2B3E4C]/20" />
-                </motion.li>
-              ))}
-            </ul>
+                  full potential
+                </span>
+                .
+              </h2>
+
+              {/* Services grid */}
+              <div className="grid grid-cols-2 gap-8 mt-12">
+                {defaultServices.map((service, idx) => (
+                  <motion.div
+                    key={service.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">{service.title}</h3>
+                    <ul className="space-y-1">
+                      {service.items.map((item) => (
+                        <li key={item} className="text-xs text-[#1a1a1a]/60">{item}</li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Right: Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              viewport={{ once: true }}
+              className="lg:w-1/2"
+            >
+              <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl">
+                <Image
+                  src={data.detailImage}
+                  alt={`${data.title} showcase`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── Tech Stack Pills ── */}
+        <section className="px-6 md:px-14 lg:px-24 py-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-3"
+          >
+            {data.tech.map((t, i) => (
+              <motion.span
+                key={t.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                viewport={{ once: true }}
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#1a1a1a]/10 text-[#1a1a1a] backdrop-blur-sm"
+              >
+                {t.label}
+              </motion.span>
+            ))}
           </motion.div>
         </section>
 
-        {/* ── Footer CTA ── */}
-        <section
-          className="mx-6 md:mx-14 lg:mx-24 mb-24 rounded-2xl px-10 py-16 flex flex-col md:flex-row items-center justify-between gap-8"
-          style={{ backgroundColor: "#2B3E4C" }}
-        >
-          <h2 className="font-display font-black text-3xl md:text-5xl text-[#FBE8C5] leading-tight text-balance max-w-md">
-            Ready to see it{" "}
-            <span
-              style={{
-                textDecoration: "underline",
-                textDecorationColor: data.accentColor,
-                textDecorationThickness: "3px",
-                textUnderlineOffset: "6px",
-              }}
-            >
-              live?
-            </span>
-          </h2>
-          <div className="flex flex-wrap gap-4">
+        {/* ── CTA Section ── */}
+        <section className="px-6 md:px-14 lg:px-24 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row items-center justify-center gap-6"
+          >
             <a
               href={data.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-[11px] font-black uppercase tracking-[0.2em] text-[#2B3E4C] hover:scale-[1.03] transition-transform"
-              style={{ backgroundColor: data.accentColor === "#D4831A" ? "#F0A83B" : "#3A8CC4" }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold bg-[#1a1a1a] text-white hover:scale-105 transition-transform shadow-lg"
             >
               <ExternalLink className="w-4 h-4" />
               {data.labelVisit}
             </a>
+            <a
+              href={data.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold border-2 border-[#1a1a1a]/30 text-[#1a1a1a] hover:bg-[#1a1a1a]/10 transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              {data.labelCode}
+            </a>
             <Link
               href="/"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-[11px] font-black uppercase tracking-[0.2em] border border-[#FBE8C5]/25 text-[#FBE8C5] hover:bg-[#FBE8C5]/10 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
-              {data.labelBack}
+              &larr; {data.labelBack}
             </Link>
-          </div>
+          </motion.div>
         </section>
+
+        {/* ── Footer Bar ── */}
+        <footer className="bg-[#1a1a1a] text-white/60 py-4 px-6 text-center text-xs">
+          <p>
+            Your rights remain in Tucson. Upgrade now to get the most out of your visit. 
+            <span className="ml-2 px-2 py-1 bg-white/10 rounded text-white text-[10px]">Upgrade</span>
+          </p>
+        </footer>
 
       </main>
     </>
