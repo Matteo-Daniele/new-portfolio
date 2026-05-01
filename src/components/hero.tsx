@@ -49,8 +49,7 @@ export default function Hero() {
           priority
         />
         {/* Overlay to soften and blend with palette */}
-        <div className="absolute inset-0 bg-[#1B5E99]/50" />
-        <div className="absolute inset-0 bg-[#2B3E4C]/40" />
+        <div className="absolute inset-0 bg-[var(--bg-main)]/70" />
       </div>
 
       {/* Subtle grain overlay */}
