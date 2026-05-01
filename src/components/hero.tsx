@@ -49,7 +49,8 @@ export default function Hero() {
           priority
         />
         {/* Overlay to soften and blend with palette */}
-        <div className="absolute inset-0 bg-[var(--bg-main)]/70" />
+        <div className="absolute inset-0 bg-[#1B5E99]/50" />
+        <div className="absolute inset-0 bg-[#2B3E4C]/40" />
       </div>
 
       {/* Subtle grain overlay */}
@@ -66,7 +67,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-sm font-medium tracking-widest uppercase text-[var(--text-secondary)] mb-8"
+          className="text-sm font-medium tracking-widest uppercase text-white/80 mb-8"
         >
           {t.greeting}
         </motion.p>
@@ -75,18 +76,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[clamp(2.5rem,8vw,6rem)] font-display font-bold leading-[1.05] tracking-tight text-[var(--text-primary)] mb-6"
+          className="text-[clamp(2.5rem,8vw,6rem)] font-display font-bold leading-[1.05] tracking-tight text-white mb-6"
         >
           {t.title}
           <br />
-          <span className="italic text-[var(--accent-warm)]">{t.titleAccent}</span>
+          <span className="italic" style={{ color: "#F0A83B" }}>{t.titleAccent}</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-lg md:text-xl text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed font-light mb-12"
+          className="text-lg md:text-xl text-white/70 max-w-lg mx-auto leading-relaxed font-light mb-12"
         >
           {t.subtitle}
         </motion.p>
@@ -100,7 +101,7 @@ export default function Hero() {
           <Link href="#projects">
             <Button
               size="lg"
-              className="rounded-full px-8 h-12 bg-[var(--text-primary)] text-[var(--bg-elevated)] hover:bg-[var(--text-primary)]/90 transition-all duration-300 text-sm font-medium tracking-wide"
+              className="rounded-full px-8 h-12 bg-white text-[var(--text-primary)] hover:bg-white/90 transition-all duration-300 text-sm font-medium tracking-wide"
             >
               {t.viewWork}
               <ArrowDown className="ml-2 h-4 w-4" />
@@ -110,7 +111,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="ghost"
-              className="rounded-full px-6 h-12 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30 transition-all duration-300 text-sm font-medium"
+              className="rounded-full px-6 h-12 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 text-sm font-medium border border-white/20"
             >
               <Github className="mr-2 h-4 w-4" />
               {t.githubProfile}
@@ -120,7 +121,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="ghost"
-              className="rounded-full px-6 h-12 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30 transition-all duration-300 text-sm font-medium"
+              className="rounded-full px-6 h-12 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 text-sm font-medium border border-white/20"
             >
               <Download className="mr-2 h-4 w-4" />
               {t.downloadCV}
@@ -139,9 +140,9 @@ export default function Hero() {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-8 rounded-full border-2 border-[var(--text-primary)]/20 flex items-start justify-center pt-1.5"
+          className="w-5 h-8 rounded-full border-2 border-white/30 flex items-start justify-center pt-1.5"
         >
-          <div className="w-1 h-1.5 rounded-full bg-[var(--text-primary)]/30" />
+          <div className="w-1 h-1.5 rounded-full bg-white/40" />
         </motion.div>
       </motion.div>
     </section>
