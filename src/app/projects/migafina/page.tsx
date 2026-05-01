@@ -28,7 +28,8 @@ export default function MigafinaProjectPage() {
           body: "Un sitio que comunica premium desde el primer scroll, con tiempos de carga rápidos y una narrativa visual coherente que refuerza la marca.",
         },
         heroImage: "/images/migafina-desktop.png",
-        detailImage: "/images/migafina-desktop.png",
+        detailImage: "/images/migafina-mobile.png",
+        images: ["/images/migafina-desktop.png", "/images/migafina-mobile.png", "/images/migafina-logo.png", "/images/migafina-desktop.png"],
         demoUrl: "https://migafina.com",
         repoUrl: "https://github.com/Matteo-Daniele",
         tech: [
@@ -83,7 +84,8 @@ export default function MigafinaProjectPage() {
           body: "A site that communicates premium from the first scroll, with fast load times and a coherent visual narrative that reinforces the brand at every touchpoint.",
         },
         heroImage: "/images/migafina-desktop.png",
-        detailImage: "/images/migafina-desktop.png",
+        detailImage: "/images/migafina-mobile.png",
+        images: ["/images/migafina-desktop.png", "/images/migafina-mobile.png", "/images/migafina-logo.png", "/images/migafina-desktop.png"],
         demoUrl: "https://migafina.com",
         repoUrl: "https://github.com/Matteo-Daniele",
         tech: [

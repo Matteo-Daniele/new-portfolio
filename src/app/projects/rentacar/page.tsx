@@ -28,7 +28,8 @@ export default function RentacarProjectPage() {
           body: "Una plataforma robusta que redujo el tiempo de gestión de reservas y eliminó conflictos de disponibilidad, con una curva de aprendizaje mínima para el equipo.",
         },
         heroImage: "/images/rentacar-desktop1.png",
-        detailImage: "/images/rentacar-desktop1.png",
+        detailImage: "/images/rentacar-desktop2.png",
+        images: ["/images/rentacar-desktop1.png", "/images/rentacar-desktop2.png", "/images/rentacar-desktop3.png", "/images/rentacar-desktop1.png"],
         demoUrl: "#",
         repoUrl: "https://github.com/Matteo-Daniele",
         tech: [
@@ -84,7 +85,8 @@ export default function RentacarProjectPage() {
           body: "A robust platform that reduced reservation management time and eliminated availability conflicts, with a minimal learning curve for the operations team.",
         },
         heroImage: "/images/rentacar-desktop1.png",
-        detailImage: "/images/rentacar-desktop1.png",
+        detailImage: "/images/rentacar-desktop2.png",
+        images: ["/images/rentacar-desktop1.png", "/images/rentacar-desktop2.png", "/images/rentacar-desktop3.png", "/images/rentacar-desktop1.png"],
         demoUrl: "#",
         repoUrl: "https://github.com/Matteo-Daniele",
         tech: [

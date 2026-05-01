@@ -32,6 +32,7 @@ export interface ProjectPageData {
   outcome: ProjectSection
   heroImage: string
   detailImage: string
+  images?: string[] // Additional images for variety
   demoUrl: string
   repoUrl: string
   tech: Tech[]
@@ -101,6 +102,14 @@ function CurvedMarquee({ text, speed = 20 }: { text: string; speed?: number }) {
 
 export default function ProjectPageLayout({ data }: Props) {
   const marqueeText = data.marqueeText || `We help you realize your potential`
+  
+  // Get images array or fallback to hero/detail images
+  const allImages = data.images && data.images.length > 0 
+    ? data.images 
+    : [data.heroImage, data.detailImage]
+  
+  // Helper to get image at index with fallback
+  const getImage = (index: number) => allImages[index % allImages.length]
   
   const defaultServices: ServiceCategory[] = data.services || [
     {
@@ -173,7 +182,7 @@ export default function ProjectPageLayout({ data }: Props) {
           >
             <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden shadow-2xl">
               <Image
-                src={data.heroImage}
+                src={getImage(0)}
                 alt={`${data.title} preview`}
                 fill
                 className="object-cover"
@@ -197,7 +206,7 @@ export default function ProjectPageLayout({ data }: Props) {
             >
               <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
                 <Image
-                  src={data.heroImage}
+                  src={getImage(1)}
                   alt="Project detail 1"
                   fill
                   className="object-cover"
@@ -218,7 +227,7 @@ export default function ProjectPageLayout({ data }: Props) {
             >
               <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
                 <Image
-                  src={data.detailImage}
+                  src={getImage(2)}
                   alt="Project detail 2"
                   fill
                   className="object-cover"
@@ -365,7 +374,7 @@ export default function ProjectPageLayout({ data }: Props) {
             >
               <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl">
                 <Image
-                  src={data.detailImage}
+                  src={getImage(3)}
                   alt={`${data.title} showcase`}
                   fill
                   className="object-cover"
