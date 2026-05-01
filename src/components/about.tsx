@@ -189,56 +189,7 @@ export default function About() {
           ))}
         </div>
 
-        {/* Side circular progress */}
-        <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 flex flex-col items-center gap-0 z-20">
-          {cards.map((card, i) => (
-            <div key={i} className="flex flex-col items-center">
-              {/* Dot */}
-              <button
-                className="relative flex items-center justify-center w-10 h-10 group"
-                aria-label={card.label}
-              >
-                {/* Outer ring */}
-                <div
-                  className="absolute w-8 h-8 rounded-full border-2 transition-all duration-500"
-                  style={{
-                    borderColor: activeCard === i ? "var(--text-primary)" : "var(--border-subtle)",
-                    transform: activeCard === i ? "scale(1)" : "scale(0.75)",
-                    opacity: activeCard === i ? 1 : 0.5,
-                  }}
-                />
-                {/* Inner fill */}
-                <div
-                  className="w-3 h-3 rounded-full transition-all duration-500"
-                  style={{
-                    backgroundColor: activeCard === i ? "var(--text-primary)" : "var(--border-subtle)",
-                    transform: activeCard === i ? "scale(1)" : "scale(0.6)",
-                  }}
-                />
-                {/* Label on hover / active */}
-                <span
-                  className="absolute right-full mr-4 text-[10px] font-semibold tracking-wider uppercase whitespace-nowrap transition-all duration-300 hidden md:block"
-                  style={{
-                    color: activeCard === i ? "var(--text-primary)" : "var(--text-muted)",
-                    opacity: activeCard === i ? 1 : 0,
-                    transform: activeCard === i ? "translateX(0)" : "translateX(8px)",
-                  }}
-                >
-                  {card.label}
-                </span>
-              </button>
-              {/* Connector line */}
-              {i < cards.length - 1 && (
-                <div
-                  className="w-[2px] h-6 transition-colors duration-500"
-                  style={{
-                    backgroundColor: activeCard > i ? "var(--text-primary)" : "var(--border-subtle)",
-                  }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        
       </div>
     </section>
   )
