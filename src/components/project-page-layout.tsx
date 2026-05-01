@@ -88,10 +88,10 @@ function CurvedMarquee({ text, speed = 20 }: { text: string; speed?: number }) {
           transform: "rotate(-2deg)",
         }}
       >
-        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]/90 tracking-tight">
+        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2B3E4C]/90 tracking-tight">
           {repeatedText}
         </span>
-        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]/90 tracking-tight ml-8">
+        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2B3E4C]/90 tracking-tight ml-8">
           {repeatedText}
         </span>
       </motion.div>
@@ -125,9 +125,9 @@ export default function ProjectPageLayout({ data }: Props) {
     <>
       <Navbar />
       <main 
-        className="min-h-screen text-[#1a1a1a]"
+        className="min-h-screen text-[#2B3E4C]"
         style={{
-          background: "linear-gradient(180deg, #9B3DDF 0%, #C44D99 25%, #E8A066 60%, #F5C84C 100%)",
+          background: "linear-gradient(180deg, #1B5E99 0%, #3A8CC4 20%, #D4831A 50%, #F0A83B 75%, #FBE8C5 100%)",
         }}
       >
 
@@ -142,7 +142,7 @@ export default function ProjectPageLayout({ data }: Props) {
             variants={fadeUp}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="font-sans text-3xl md:text-5xl lg:text-6xl font-medium leading-tight text-[#1a1a1a]">
+            <h1 className="font-sans text-3xl md:text-5xl lg:text-6xl font-medium leading-tight text-[#2B3E4C]">
               {data.tagline.split("||").map((part, i) =>
                 i % 2 === 1 ? (
                   <span
@@ -150,7 +150,7 @@ export default function ProjectPageLayout({ data }: Props) {
                     className="relative inline"
                     style={{
                       textDecoration: "underline",
-                      textDecorationColor: "#F5C84C",
+                      textDecorationColor: "#F0A83B",
                       textDecorationThickness: "4px",
                       textUnderlineOffset: "8px",
                     }}
@@ -203,7 +203,7 @@ export default function ProjectPageLayout({ data }: Props) {
                   className="object-cover"
                 />
               </div>
-              <p className="mt-4 text-sm font-medium text-[#1a1a1a]/80 max-w-[250px]">
+              <p className="mt-4 text-sm font-medium text-[#2B3E4C]/80 max-w-[250px]">
                 {data.challenge.body.slice(0, 80)}...
               </p>
             </motion.div>
@@ -224,7 +224,7 @@ export default function ProjectPageLayout({ data }: Props) {
                   className="object-cover"
                 />
               </div>
-              <p className="mt-4 text-sm font-medium text-[#1a1a1a]/80 max-w-[250px]">
+              <p className="mt-4 text-sm font-medium text-[#2B3E4C]/80 max-w-[250px]">
                 {data.approach.body.slice(0, 80)}...
               </p>
             </motion.div>
@@ -248,7 +248,7 @@ export default function ProjectPageLayout({ data }: Props) {
               viewport={{ once: true }}
               className="flex-shrink-0"
             >
-              <ArrowRight className="w-16 h-16 text-[#1a1a1a]/70" strokeWidth={1} />
+              <ArrowRight className="w-16 h-16 text-[#2B3E4C]/70" strokeWidth={1} />
             </motion.div>
 
             {/* Text content */}
@@ -259,13 +259,13 @@ export default function ProjectPageLayout({ data }: Props) {
                 viewport={{ once: true }}
                 custom={0}
                 variants={fadeUp}
-                className="text-2xl md:text-4xl font-medium leading-snug text-[#1a1a1a] mb-6"
+                className="text-2xl md:text-4xl font-medium leading-snug text-[#2B3E4C] mb-6"
               >
                 {data.description.split(".")[0]}.{" "}
                 <span
                   style={{
                     textDecoration: "underline",
-                    textDecorationColor: "#F5C84C",
+                    textDecorationColor: "#F0A83B",
                     textDecorationThickness: "3px",
                     textUnderlineOffset: "6px",
                   }}
@@ -283,10 +283,10 @@ export default function ProjectPageLayout({ data }: Props) {
                 variants={fadeUp}
                 className="grid md:grid-cols-2 gap-6 mt-8"
               >
-                <p className="text-sm text-[#1a1a1a]/70 leading-relaxed">
+                <p className="text-sm text-[#2B3E4C]/70 leading-relaxed">
                   {data.challenge.body}
                 </p>
-                <p className="text-sm text-[#1a1a1a]/70 leading-relaxed">
+                <p className="text-sm text-[#2B3E4C]/70 leading-relaxed">
                   {data.approach.body}
                 </p>
               </motion.div>
@@ -300,7 +300,7 @@ export default function ProjectPageLayout({ data }: Props) {
               >
                 <Link
                   href={data.demoUrl}
-                  className="text-sm font-medium text-[#1a1a1a] underline underline-offset-4 hover:opacity-70 transition-opacity"
+                  className="text-sm font-medium text-[#2B3E4C] underline underline-offset-4 hover:opacity-70 transition-opacity"
                 >
                   Learn about how we work &rarr;
                 </Link>
@@ -322,12 +322,12 @@ export default function ProjectPageLayout({ data }: Props) {
               variants={fadeUp}
               className="lg:w-1/2"
             >
-              <h2 className="text-3xl md:text-5xl font-medium leading-tight text-[#1a1a1a]">
+              <h2 className="text-3xl md:text-5xl font-medium leading-tight text-[#2B3E4C]">
                 {"We're obsessed with"}<br />
                 {"helping you reach your"}<br />
                 <span 
                   className="inline-block px-2 py-1 mt-2"
-                  style={{ backgroundColor: "#F5C84C" }}
+                  style={{ backgroundColor: "#F0A83B" }}
                 >
                   full potential
                 </span>
@@ -344,10 +344,10 @@ export default function ProjectPageLayout({ data }: Props) {
                     transition={{ delay: idx * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <h3 className="text-sm font-bold text-[#1a1a1a] mb-2">{service.title}</h3>
+                    <h3 className="text-sm font-bold text-[#2B3E4C] mb-2">{service.title}</h3>
                     <ul className="space-y-1">
                       {service.items.map((item) => (
-                        <li key={item} className="text-xs text-[#1a1a1a]/60">{item}</li>
+                        <li key={item} className="text-xs text-[#2B3E4C]/60">{item}</li>
                       ))}
                     </ul>
                   </motion.div>
@@ -390,7 +390,7 @@ export default function ProjectPageLayout({ data }: Props) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
-                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#1a1a1a]/10 text-[#1a1a1a] backdrop-blur-sm"
+                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#2B3E4C]/10 text-[#2B3E4C] backdrop-blur-sm"
               >
                 {t.label}
               </motion.span>
@@ -410,7 +410,7 @@ export default function ProjectPageLayout({ data }: Props) {
               href={data.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold bg-[#1a1a1a] text-white hover:scale-105 transition-transform shadow-lg"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold bg-[#2B3E4C] text-white hover:scale-105 transition-transform shadow-lg"
             >
               <ExternalLink className="w-4 h-4" />
               {data.labelVisit}
@@ -419,14 +419,14 @@ export default function ProjectPageLayout({ data }: Props) {
               href={data.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold border-2 border-[#1a1a1a]/30 text-[#1a1a1a] hover:bg-[#1a1a1a]/10 transition-colors"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold border-2 border-[#2B3E4C]/30 text-[#2B3E4C] hover:bg-[#2B3E4C]/10 transition-colors"
             >
               <Github className="w-4 h-4" />
               {data.labelCode}
             </a>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a]/70 hover:text-[#1a1a1a] transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[#2B3E4C]/70 hover:text-[#2B3E4C] transition-colors"
             >
               &larr; {data.labelBack}
             </Link>
@@ -434,7 +434,7 @@ export default function ProjectPageLayout({ data }: Props) {
         </section>
 
         {/* ── Footer Bar ── */}
-        <footer className="bg-[#1a1a1a] text-white/60 py-4 px-6 text-center text-xs">
+        <footer className="bg-[#2B3E4C] text-white/60 py-4 px-6 text-center text-xs">
           <p>
             Your rights remain in Tucson. Upgrade now to get the most out of your visit. 
             <span className="ml-2 px-2 py-1 bg-white/10 rounded text-white text-[10px]">Upgrade</span>
