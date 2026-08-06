@@ -10,6 +10,8 @@ export default function RentacarProjectPage() {
     ? {
         title: "Rent a Car",
         tagline: "Una plataforma de gestión de flota construida para la ||eficiencia real|| de negocio.",
+        altTagline: "A fleet management platform built for real business efficiency.",
+        marqueeText: "Gestión inteligente \u2717 Reservas automatizadas \u2717 Control total de flota",
         year: "2024",
         role: "Full-Stack Developer",
         category: "Aplicación Web",
@@ -44,7 +46,6 @@ export default function RentacarProjectPage() {
         labelBack: "Volver al Inicio",
         labelVisit: "Ver Demo en Vivo",
         labelCode: "Código Fuente",
-        marqueeText: "Gestión inteligente ✻ Reservas automatizadas ✻ Control total de flota",
         services: [
           {
             title: "Dashboard",
@@ -67,6 +68,8 @@ export default function RentacarProjectPage() {
     : {
         title: "Rent a Car",
         tagline: "A fleet management platform built for ||real business|| efficiency.",
+        altTagline: "Una plataforma de gestión de flota construida para la eficiencia real de negocio.",
+        marqueeText: "Smart management \u2717 Automated bookings \u2717 Total fleet control",
         year: "2024",
         role: "Full-Stack Developer",
         category: "Web Application",
@@ -101,7 +104,6 @@ export default function RentacarProjectPage() {
         labelBack: "Back to Home",
         labelVisit: "View Live Demo",
         labelCode: "Source Code",
-        marqueeText: "Smart management ✻ Automated bookings ✻ Total fleet control",
         services: [
           {
             title: "Dashboard",

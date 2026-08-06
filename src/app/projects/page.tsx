@@ -121,7 +121,7 @@ export default function ProjectsPage() {
               className="inline-flex items-center gap-3 mb-6"
             >
               <div className="w-2 h-2 rounded-full bg-[var(--accent-warm)]" />
-              <span className="font-mono text-xs tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
+              <span className="text-xs font-medium uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
                 {allProjects.length} {language === "en" ? "Projects" : "Proyectos"}
               </span>
             </motion.div>
@@ -205,11 +205,11 @@ export default function ProjectsPage() {
 
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--text-primary)]/90 shadow-lg hover:shadow-xl"
               style={{
-                background: "linear-gradient(135deg, #1B5E99 0%, #3A8CC4 100%)",
-                color: "#FFFBF4",
-                boxShadow: "0 8px 24px rgba(27,94,153,0.25)",
+                background: "var(--text-primary)",
+                color: "var(--bg-elevated)",
+                boxShadow: "0 8px 24px rgba(43,62,76,0.2)",
               }}
             >
               {t.contactCta}

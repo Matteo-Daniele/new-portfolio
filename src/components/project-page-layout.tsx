@@ -1,10 +1,12 @@
 "use client"
 
 import Navbar from "@/components/navbar"
-import { motion } from "framer-motion"
-import { ArrowRight, ExternalLink, Github } from "lucide-react"
+import { motion, useReducedMotion } from "framer-motion"
+import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
+import { useLanguage } from "./language-provider"
 
 interface Tech {
   label: string
@@ -27,12 +29,14 @@ export interface ProjectPageData {
   role: string
   category: string
   description: string
+  altTagline?: string
+  marqueeText?: string
   challenge: ProjectSection
   approach: ProjectSection
   outcome: ProjectSection
   heroImage: string
   detailImage: string
-  images?: string[] // Additional images for variety
+  images?: string[]
   demoUrl: string
   repoUrl: string
   tech: Tech[]
@@ -40,7 +44,6 @@ export interface ProjectPageData {
   labelBack: string
   labelVisit: string
   labelCode: string
-  marqueeText?: string
   services?: ServiceCategory[]
 }
 
@@ -53,46 +56,70 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { delay: i * 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   }),
 }
 
-// Curved text marquee component
-function CurvedMarquee({ text, speed = 20 }: { text: string; speed?: number }) {
-  const repeatedText = Array(6).fill(text).join(" ✻ ")
-  
+const INK = "#2B3E4C"
+
+function AdaptiveImage({
+  src,
+  alt,
+  priority,
+  className = "rounded-[2rem]",
+  minHeight = "16rem",
+}: {
+  src: string
+  alt: string
+  priority?: boolean
+  className?: string
+  minHeight?: string
+}) {
+  const [ratio, setRatio] = useState<number | null>(null)
+
   return (
-    <div className="relative w-full overflow-hidden py-8">
-      {/* SVG path for the curve */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <defs>
-          <path
-            id="curvePath"
-            d="M 0,80 Q 300,20 600,60 T 1200,40"
-            fill="none"
-          />
-        </defs>
-      </svg>
-      
+    <div
+      className={`relative w-full overflow-hidden shadow-2xl border border-white/20 ${className}`}
+      style={ratio ? { aspectRatio: ratio } : { minHeight }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority={priority}
+        sizes="(max-width: 768px) 100vw, 460px"
+        className="object-cover"
+        onLoad={(e) => {
+          const { naturalWidth: w, naturalHeight: h } = e.currentTarget
+          if (w && h) setRatio(w / h)
+        }}
+      />
+    </div>
+  )
+}
+
+/* Sweeping marquee band — the animated moment */
+function Marquee({ text, ink }: { text: string; ink: boolean }) {
+  const rm = useReducedMotion()
+  const repeatedText = Array(6).fill(text).join("  \u2717  ")
+
+  return (
+    <div className="relative w-full overflow-hidden py-7 -my-6" style={{ transform: "rotate(-2deg) scale(1.01)" }}>
       <motion.div
         className="flex whitespace-nowrap"
-        animate={{ x: [0, -2000] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: speed,
-            ease: "linear",
-          },
-        }}
-        style={{
-          transform: "rotate(-2deg)",
-        }}
+        animate={rm ? undefined : { x: [0, -2400] }}
+        transition={{ x: { repeat: Infinity, repeatType: "loop", duration: 26, ease: "linear" } }}
       >
-        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2B3E4C]/90 tracking-tight">
+        <span
+          className="text-4xl md:text-6xl font-display font-bold tracking-tight uppercase"
+          style={{ color: ink ? INK : "#FFFFFF" }}
+        >
           {repeatedText}
         </span>
-        <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2B3E4C]/90 tracking-tight ml-8">
+        <span
+          className="text-4xl md:text-6xl font-display font-bold tracking-tight uppercase ml-8"
+          style={{ color: ink ? INK : "#FFFFFF" }}
+        >
           {repeatedText}
         </span>
       </motion.div>
@@ -101,355 +128,393 @@ function CurvedMarquee({ text, speed = 20 }: { text: string; speed?: number }) {
 }
 
 export default function ProjectPageLayout({ data }: Props) {
-  const marqueeText = data.marqueeText || `We help you realize your potential`
-  
-  // Get images array or fallback to hero/detail images
-  const allImages = data.images && data.images.length > 0 
-    ? data.images 
-    : [data.heroImage, data.detailImage]
-  
-  // Helper to get image at index with fallback
+  const { language } = useLanguage()
+  const rm = useReducedMotion()
+
+  const tr = {
+    en: {
+      back: data.labelBack || "Back to Home",
+      caseStudy: "Case study",
+      theStory: "The story",
+      stack: "Tech stack",
+      capabilities: "What this covers",
+      visit: "Live demo",
+      code: "Source code",
+      allProjects: "All projects",
+      built: "Built with Next.js, Tailwind & framer-motion",
+      rights: "All rights reserved.",
+    },
+    es: {
+      back: data.labelBack || "Volver al Inicio",
+      caseStudy: "Estudio de caso",
+      theStory: "La historia",
+      stack: "Stack técnico",
+      capabilities: "Qué cubre",
+      visit: "Demo en vivo",
+      code: "Código fuente",
+      allProjects: "Todos los proyectos",
+      built: "Hecho con Next.js, Tailwind y framer-motion",
+      rights: "Todos los derechos reservados.",
+    },
+  }[language]
+
+  const allImages = data.images && data.images.length > 0 ? data.images : [data.heroImage, data.detailImage]
   const getImage = (index: number) => allImages[index % allImages.length]
-  
-  const defaultServices: ServiceCategory[] = data.services || [
-    {
-      title: "General Design",
-      items: ["Product design", "Brand design", "UI design"],
-    },
-    {
-      title: "Data & Analytics",
-      items: ["Performance reporting", "Market data sharing", "Conversion optimization"],
-    },
-    {
-      title: "SEO Optimization",
-      items: ["Technical optimization", "Content optimization", "Keyword research"],
-    },
-    {
-      title: "Digital Advertising",
-      items: ["Social media", "Optimization and reporting"],
-    },
+  const marquee = data.marqueeText || `${data.title} \u2717 ${data.category}`
+
+  const sections: { meta: ProjectSection; n: string }[] = [
+    { meta: data.challenge, n: language === "es" ? "01" : "01" },
+    { meta: data.approach, n: "02" },
+    { meta: data.outcome, n: "03" },
   ]
 
   return (
     <>
-      <Navbar />
-      <main 
-        className="min-h-screen text-[#2B3E4C]"
-        style={{
-          background: "linear-gradient(180deg, #1B5E99 0%, #3A8CC4 20%, #D4831A 50%, #F0A83B 75%, #FBE8C5 100%)",
-        }}
-      >
+      <Navbar overlay="light" />
 
-        {/* ── Hero Section ── */}
-        <section className="relative pt-32 pb-16 px-6 md:px-14 lg:px-24">
-          
-          {/* Main headline with yellow underline */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            custom={0}
-            variants={fadeUp}
-            className="max-w-4xl mx-auto"
-          >
-            <h1 className="font-sans text-3xl md:text-5xl lg:text-6xl font-medium leading-tight text-[#2B3E4C]">
-              {data.tagline.split("||").map((part, i) =>
-                i % 2 === 1 ? (
+      <main>
+        {/* ── Whole-page gradient: Atlantic blue → amber → sand ── */}
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(180deg, #1B5E99 0%, #3A8CC4 24%, #D4831A 50%, #F0A83B 72%, #FBE8C5 100%)",
+          }}
+        />
+
+        {/* ── Hero (blue zone) ── */}
+        <section
+          className="relative pt-28 md:pt-36 pb-16 md:pb-24 overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(180deg, #1B5E99 0%, #3A8CC4 100%), radial-gradient(120% 60% at 100% 0%, rgba(255,255,255,0.10) 0%, transparent 60%)",
+            backgroundBlendMode: "overlay, normal",
+          }}
+        >
+          <div className="mx-auto max-w-5xl px-6 md:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-10 md:mb-16"
+            >
+              <Link
+                href="/"
+                className="group inline-flex items-center gap-2.5 text-sm font-medium text-white/70 hover:text-white"
+              >
+                <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
+                {tr.back}
+              </Link>
+            </motion.div>
+
+            <div className="grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:items-center">
+              <motion.div initial="hidden" animate="visible" custom={0} variants={fadeUp}>
+                <div className="inline-flex items-center gap-3 mb-6">
+                  <span className="h-2 w-2 rounded-full" style={{ background: data.accentColor }} />
+                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-white/70">
+                    {tr.caseStudy}
+                  </span>
+                </div>
+
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight leading-[1.05] mb-6 text-white">
+                  {data.tagline.split("||").map((part, i) =>
+                    i % 2 === 1 ? (
+                      <span
+                        key={i}
+                        className="relative inline-block text-[#FBE8C5]"
+                        style={{
+                          textDecoration: "underline",
+                          textDecorationColor: "#F0A83B",
+                          textDecorationThickness: "0.08em",
+                          textUnderlineOffset: "0.12em",
+                        }}
+                      >
+                        {part}
+                      </span>
+                    ) : (
+                      <span key={i}>{part}</span>
+                    )
+                  )}
+                </h1>
+
+                {data.altTagline && (
+                  <p className="text-lg md:text-xl font-display italic text-white/60 max-w-xl mb-8">
+                    {data.altTagline}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-mono text-white/80">
+                  <span>{data.year}</span>
+                  <span className="h-3 w-px bg-white/30" />
+                  <span>{data.role}</span>
+                  <span className="h-3 w-px bg-white/30" />
+                  <span className="text-[#FBE8C5]">{data.category}</span>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="lg:pl-6"
+              >
+                <AdaptiveImage
+                  src={getImage(0)}
+                  alt={`${data.title} preview`}
+                  priority
+                  className="rounded-[2rem]"
+                  minHeight="18rem"
+                />
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Curved marquee over the amber transition ── */}
+        <div className="relative overflow-x-clip">
+          <div className="relative text-[#2B3E4C] overflow-visible">
+            <Marquee text={marquee} ink />
+          </div>
+        </div>
+
+        {/* ── Description (amber → sand body) ── */}
+        <section className="relative py-16 md:py-24 px-6 md:px-8">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-col md:flex-row items-start gap-8 md:gap-12"
+            >
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex-shrink-0">
+                <ArrowRight className="w-14 h-14 md:w-16 md:h-16" color={INK} strokeWidth={1.2} />
+              </motion.div>
+
+              <div className="flex-1">
+                <motion.h2
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  custom={0}
+                  variants={fadeUp}
+                  className="text-2xl md:text-4xl font-display font-semibold leading-snug"
+                  style={{ color: INK }}
+                >
+                  {data.description.split(".")[0]}.{" "}
                   <span
-                    key={i}
-                    className="relative inline"
+                    className="text-[#333028]"
                     style={{
                       textDecoration: "underline",
-                      textDecorationColor: "#F0A83B",
-                      textDecorationThickness: "4px",
-                      textUnderlineOffset: "8px",
+                      textDecorationColor: "#D4831A",
+                      textDecorationThickness: "3px",
+                      textUnderlineOffset: "5px",
                     }}
                   >
-                    {part}
+                    {data.description.split(".")[1]?.trim() || "Built to impress"}
                   </span>
-                ) : (
-                  <span key={i}>{part}</span>
-                )
-              )}
-            </h1>
-          </motion.div>
+                  .
+                </motion.h2>
 
-          {/* Hero image - pill shaped with rounded corners */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-12 max-w-3xl mx-auto"
-          >
-            <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden shadow-2xl">
-              <Image
-                src={getImage(0)}
-                alt={`${data.title} preview`}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </motion.div>
-        </section>
+                <div className="mt-10">
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="mb-8 flex items-center gap-3"
+                  >
+                    <span className="w-8 h-px" style={{ background: "#D4831A" }} />
+                    <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#D4831A" }}>
+                      {tr.theStory}
+                    </span>
+                  </motion.div>
 
-        {/* ── Asymmetric Images Section ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-16">
-          <div className="flex flex-col md:flex-row items-start justify-center gap-8 md:gap-16">
-            
-            {/* Left image - offset up */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="md:-mt-20"
-            >
-              <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
-                <Image
-                  src={getImage(1)}
-                  alt="Project detail 1"
-                  fill
-                  className="object-cover"
-                />
+                  <div className="grid gap-6 md:grid-cols-3 md:gap-5">
+                    {sections.map((block, i) => (
+                      <motion.article
+                        key={block.meta.heading}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-60px" }}
+                        custom={i}
+                        variants={fadeUp}
+                        className="rounded-2xl p-6 md:p-7"
+                        style={{ background: "rgba(251,232,197,0.45)", backdropFilter: "blur(4px)" }}
+                      >
+                        <p className="text-[11px] font-mono font-semibold mb-4" style={{ color: "#1B5E99" }}>
+                          {block.n}
+                        </p>
+                        <h3 className="text-xl font-display font-semibold tracking-tight mb-2.5" style={{ color: INK }}>
+                          {block.meta.heading}
+                        </h3>
+                        <p className="text-sm leading-relaxed" style={{ color: "#3c3a34" }}>
+                          {block.meta.body}
+                        </p>
+                      </motion.article>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <p className="mt-4 text-sm font-medium text-[#2B3E4C]/80 max-w-[250px]">
-                {data.challenge.body.slice(0, 80)}...
-              </p>
-            </motion.div>
-
-            {/* Right image - offset down */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ once: true }}
-              className="md:mt-20"
-            >
-              <div className="relative w-64 md:w-80 aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl">
-                <Image
-                  src={getImage(2)}
-                  alt="Project detail 2"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <p className="mt-4 text-sm font-medium text-[#2B3E4C]/80 max-w-[250px]">
-                {data.approach.body.slice(0, 80)}...
-              </p>
             </motion.div>
           </div>
         </section>
 
-        {/* ── Curved Text Marquee ── */}
-        <section className="py-8 overflow-hidden">
-          <CurvedMarquee text={marqueeText} speed={25} />
-        </section>
-
-        {/* ── Description with Arrow ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-20">
-          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16 max-w-5xl mx-auto">
-            
-            {/* Arrow icon */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="flex-shrink-0"
-            >
-              <ArrowRight className="w-16 h-16 text-[#2B3E4C]/70" strokeWidth={1} />
-            </motion.div>
-
-            {/* Text content */}
-            <div className="flex-1">
-              <motion.h2
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={0}
-                variants={fadeUp}
-                className="text-2xl md:text-4xl font-medium leading-snug text-[#2B3E4C] mb-6"
-              >
-                {data.description.split(".")[0]}.{" "}
-                <span
-                  style={{
-                    textDecoration: "underline",
-                    textDecorationColor: "#F0A83B",
-                    textDecorationThickness: "3px",
-                    textUnderlineOffset: "6px",
-                  }}
-                >
-                  {data.description.split(".")[1]?.trim() || "Built to impress"}
-                </span>
-                .
-              </motion.h2>
-
+        {/* ── Asymmetric images ── */}
+        <section className="py-14 md:py-20 px-6 md:px-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row items-start justify-center gap-10 md:gap-14">
               <motion.div
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
                 viewport={{ once: true }}
-                custom={1}
-                variants={fadeUp}
-                className="grid md:grid-cols-2 gap-6 mt-8"
+                className="md:-mt-16 w-full md:w-80"
               >
-                <p className="text-sm text-[#2B3E4C]/70 leading-relaxed">
-                  {data.challenge.body}
-                </p>
-                <p className="text-sm text-[#2B3E4C]/70 leading-relaxed">
-                  {data.approach.body}
-                </p>
+                <AdaptiveImage src={getImage(1)} alt={`${data.title} detail`} minHeight="20rem" />
               </motion.div>
-
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.7 }}
                 viewport={{ once: true }}
-                className="mt-6"
+                className="md:mt-24 w-full md:w-80"
               >
-                <Link
-                  href={data.demoUrl}
-                  className="text-sm font-medium text-[#2B3E4C] underline underline-offset-4 hover:opacity-70 transition-opacity"
-                >
-                  Learn about how we work &rarr;
-                </Link>
+                <AdaptiveImage src={getImage(2)} alt={`${data.title} detail`} minHeight="20rem" />
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* ── Services / Tech Stack Section ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-20">
-          <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20 max-w-6xl mx-auto">
-            
-            {/* Left: Title with highlight */}
+        {/* ── Capabilities + stack (sand zone) ── */}
+        <section className="py-14 md:py-20 px-6 md:px-8">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="mb-8 flex items-center gap-3"
+            >
+              <span className="w-8 h-px" style={{ background: "#D4831A" }} />
+              <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#D4831A" }}>
+                {tr.stack}
+              </span>
+            </motion.div>
+
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               custom={0}
               variants={fadeUp}
-              className="lg:w-1/2"
+              className="flex flex-wrap gap-2.5 mb-14"
             >
-              <h2 className="text-3xl md:text-5xl font-medium leading-tight text-[#2B3E4C]">
-                {"We're obsessed with"}<br />
-                {"helping you reach your"}<br />
-                <span 
-                  className="inline-block px-2 py-1 mt-2"
-                  style={{ backgroundColor: "#F0A83B" }}
+              {data.tech.map((t) => (
+                <span
+                  key={t.label}
+                  className="px-4 py-2 rounded-full text-sm font-semibold"
+                  style={{
+                    background: "rgba(43,62,76,0.10)",
+                    color: INK,
+                    border: "1px solid rgba(43,62,76,0.15)",
+                    backdropFilter: "blur(4px)",
+                  }}
                 >
-                  full potential
+                  {t.label}
                 </span>
-                .
-              </h2>
-
-              {/* Services grid */}
-              <div className="grid grid-cols-2 gap-8 mt-12">
-                {defaultServices.map((service, idx) => (
-                  <motion.div
-                    key={service.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <h3 className="text-sm font-bold text-[#2B3E4C] mb-2">{service.title}</h3>
-                    <ul className="space-y-1">
-                      {service.items.map((item) => (
-                        <li key={item} className="text-xs text-[#2B3E4C]/60">{item}</li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                ))}
-              </div>
+              ))}
             </motion.div>
 
-            {/* Right: Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              viewport={{ once: true }}
-              className="lg:w-1/2"
-            >
-              <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-xl">
-                <Image
-                  src={getImage(3)}
-                  alt={`${data.title} showcase`}
-                  fill
-                  className="object-cover"
-                />
+            {data.services && data.services.length > 0 && (
+              <div className="mt-12">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className="mb-8 flex items-center gap-3"
+                >
+                  <span className="w-8 h-px" style={{ background: "#D4831A" }} />
+                  <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#D4831A" }}>
+                    {tr.capabilities}
+                  </span>
+                </motion.div>
+
+                <div className="grid gap-x-14 gap-y-10 md:grid-cols-2">
+                  {data.services.map((service, idx) => (
+                    <motion.div
+                      key={service.title}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      custom={idx}
+                      variants={fadeUp}
+                    >
+                      <h3 className="text-lg font-display font-semibold mb-3" style={{ color: INK }}>
+                        {service.title}
+                      </h3>
+                      <ul className="space-y-1.5">
+                        {service.items.map((item) => (
+                          <li key={item} className="text-sm flex items-center gap-2.5" style={{ color: "#3c3a34" }}>
+                            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#D4831A" }} />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── CTA ── */}
+        <section className="py-16 md:py-24 px-6 md:px-8">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col md:flex-row items-center justify-center gap-4 rounded-[2.5rem] p-10 md:p-14"
+            >
+              <a
+                href={data.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-full font-semibold text-sm text-white shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                style={{ background: INK }}
+              >
+                {tr.visit}
+                <ExternalLink className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href={data.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full font-semibold text-sm transition-all duration-300 border-2"
+                style={{ borderColor: INK, color: INK }}
+              >
+                <Github className="h-4 w-4" />
+                {tr.code}
+              </a>
+              <Link
+                href="/projects"
+                className="group inline-flex items-center gap-2 text-sm font-medium transition-colors"
+                style={{ color: INK }}
+              >
+                <ArrowUpRight className="h-4 w-4 -rotate-45 transition-transform group-hover:translate-x-0.5" />
+                {tr.allProjects}
+              </Link>
             </motion.div>
           </div>
         </section>
 
-        {/* ── Tech Stack Pills ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-3"
-          >
-            {data.tech.map((t, i) => (
-              <motion.span
-                key={t.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05 }}
-                viewport={{ once: true }}
-                className="px-5 py-2.5 rounded-full text-sm font-medium bg-[#2B3E4C]/10 text-[#2B3E4C] backdrop-blur-sm"
-              >
-                {t.label}
-              </motion.span>
-            ))}
-          </motion.div>
-        </section>
-
-        {/* ── CTA Section ── */}
-        <section className="px-6 md:px-14 lg:px-24 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col md:flex-row items-center justify-center gap-6"
-          >
-            <a
-              href={data.demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold bg-[#2B3E4C] text-white hover:scale-105 transition-transform shadow-lg"
-            >
-              <ExternalLink className="w-4 h-4" />
-              {data.labelVisit}
-            </a>
-            <a
-              href={data.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold border-2 border-[#2B3E4C]/30 text-[#2B3E4C] hover:bg-[#2B3E4C]/10 transition-colors"
-            >
-              <Github className="w-4 h-4" />
-              {data.labelCode}
-            </a>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[#2B3E4C]/70 hover:text-[#2B3E4C] transition-colors"
-            >
-              &larr; {data.labelBack}
-            </Link>
-          </motion.div>
-        </section>
-
-        {/* ── Footer Bar ── */}
-        <footer className="bg-[#2B3E4C] text-white/60 py-4 px-6 text-center text-xs">
-          <p>
-            Your rights remain in Tucson. Upgrade now to get the most out of your visit. 
-            <span className="ml-2 px-2 py-1 bg-white/10 rounded text-white text-[10px]">Upgrade</span>
+        {/* ── Footer bar (cleaned) ── */}
+        <footer className="bg-[#2B3E4C] text-white/60 py-6 px-6 text-center">
+          <p className="text-sm">
+            © {new Date().getFullYear()} Matteo Daniele · <span className="text-white/80">{data.title}</span>
           </p>
+          <p className="text-xs mt-1 text-white/40">{tr.built}</p>
         </footer>
-
       </main>
     </>
   )

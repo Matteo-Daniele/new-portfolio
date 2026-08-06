@@ -6,9 +6,10 @@ import { useEffect, useState } from "react"
 import { useLanguage } from "../components/language-provider"
 import { Button } from "../components/ui/button"
 
-export default function Navbar() {
+export default function Navbar({ overlay = "default" }: { overlay?: "default" | "light" }) {
   const { language, setLanguage } = useLanguage()
   const [scrolled, setScrolled] = useState(false)
+  const light = overlay === "light" && !scrolled
 
   const translations = {
     en: {
@@ -43,10 +44,10 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center gap-2.5">
-          <Link href="/" className="relative block h-9 w-9 overflow-hidden rounded-full border border-[var(--border-subtle)] hover:border-[var(--text-secondary)] transition-colors duration-300">
+          <Link href="/" className={`relative block h-9 w-9 overflow-hidden rounded-full border transition-colors duration-300 ${light ? "border-white/50 hover:border-white" : "border-[var(--border-subtle)] hover:border-[var(--text-secondary)]"}`}>
             <Image src="/Logo.png" alt="Matteo Daniele" fill sizes="36px" className="object-cover" />
           </Link>
-          <span className="font-display font-semibold text-sm tracking-tight hidden sm:block text-[var(--text-primary)]">Matteo Daniele</span>
+          <span className={`font-display font-semibold text-sm tracking-tight hidden sm:block ${light ? "text-white" : "text-[var(--text-primary)]"}`}>Matteo Daniele</span>
         </div>
 
         <div className="hidden md:flex items-center gap-1">
@@ -59,7 +60,7 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm px-3.5 py-1.5 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30 transition-all duration-300"
+              className={`text-sm px-3.5 py-1.5 rounded-full transition-all duration-300 ${light ? "text-white/85 hover:text-white hover:bg-white/10" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30"}`}
             >
               {item.label}
             </Link>
@@ -72,7 +73,7 @@ export default function Navbar() {
             size="icon"
             onClick={() => setLanguage(language === "en" ? "es" : "en")}
             aria-label="Toggle language"
-            className="h-8 w-8 rounded-full text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30"
+            className={`h-8 w-8 rounded-full text-xs font-semibold transition-all duration-300 ${light ? "text-white/85 hover:text-white hover:bg-white/10" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border-subtle)]/30"}`}
           >
             {language === "en" ? "EN" : "ES"}
           </Button>
