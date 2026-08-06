@@ -10,6 +10,8 @@ export default function MigafinaProjectPage() {
     ? {
         title: "Migafina",
         tagline: "Una experiencia de panadería digital diseñada para ||convertir, deleitar|| y destacar en cada detalle.",
+        altTagline: "A digital bakery experience built to convert, delight and stand out in every detail.",
+        marqueeText: "Hornear con pasión \u2717 Diseñar con propósito \u2717 Crear experiencias únicas",
         year: "2024",
         role: "Full-Stack Developer",
         category: "Plataforma E-commerce",
@@ -43,7 +45,6 @@ export default function MigafinaProjectPage() {
         labelBack: "Volver al Inicio",
         labelVisit: "Ver Sitio en Vivo",
         labelCode: "Ver Código",
-        marqueeText: "Hornear con pasión ✻ Diseñar con propósito ✻ Crear experiencias únicas",
         services: [
           {
             title: "Diseño de Producto",
@@ -66,6 +67,8 @@ export default function MigafinaProjectPage() {
     : {
         title: "Migafina",
         tagline: "A digital bakery experience built to ||convert, delight|| and stand out in every detail.",
+        altTagline: "Una experiencia de panadería digital diseñada para convertir, deleitar y destacar en cada detalle.",
+        marqueeText: "Bake with passion \u2717 Design with purpose \u2717 Create unique experiences",
         year: "2024",
         role: "Full-Stack Developer",
         category: "E-commerce Platform",
@@ -99,7 +102,6 @@ export default function MigafinaProjectPage() {
         labelBack: "Back to Home",
         labelVisit: "Visit Live Site",
         labelCode: "View Code",
-        marqueeText: "Bake with passion ✻ Design with purpose ✻ Create unique experiences",
         services: [
           {
             title: "Product Design",

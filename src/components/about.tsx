@@ -121,7 +121,7 @@ export default function About() {
   ]
 
   return (
-    <section id="about" ref={containerRef} className="relative" style={{ height: "400vh" }}>
+    <section id="about" ref={containerRef} className="relative" style={{ height: "260vh" }}>
       <div className="sticky top-0 h-screen flex items-center justify-center">
         {/* Carousel — bottom left, subtle */}
         <div className="absolute bottom-8 left-6 md:left-12 z-20 flex items-center gap-1.5 text-[var(--text-muted)]/60">
