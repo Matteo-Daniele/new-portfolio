@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
 import { useLanguage } from "../components/language-provider"
+import { PROJECTS } from "@/data/projects"
 
 export default function Projects() {
   const { language } = useLanguage()
@@ -29,41 +30,17 @@ export default function Projects() {
 
   const t = translations[language]
 
-  const projectsData = [
-    {
-      id: 1,
-      title: "Migafina",
-      subtitle: language === "en" ? "Artisan bakery digital experience" : "Experiencia digital de panadería artesanal",
-      image: "/images/migafina-desktop.png",
-      mobileImage: "/images/migafina-mobile.png",
-      tags: ["Next.js", "React", "Tailwind"],
-      caseStudyUrl: "/projects/migafina",
-      year: "2025",
-      color: "#D4831A",
-    },
-    {
-      id: 2,
-      title: "Rent a Car",
-      subtitle: language === "en" ? "Vehicle reservation platform" : "Plataforma de reservas de vehículos",
-      image: "/images/rentacar-desktop1.png",
-      mobileImage: "/images/rentacar-desktop2.png",
-      tags: ["React.js", "Node.js", "MongoDB"],
-      caseStudyUrl: "/projects/rentacar",
-      year: "2024",
-      color: "#1B5E99",
-    },
-    {
-      id: 3,
-      title: "Gian Barber",
-      subtitle: language === "en" ? "Barbershop management & revenue platform" : "Plataforma de gestión y ganancias de barbería",
-      image: "/images/admingian-app-desktop.png",
-      mobileImage: "/images/admingian-app-mobile.png",
-      tags: ["Next.js", "Supabase", "TypeScript"],
-      caseStudyUrl: "/projects/gian-barber",
-      year: "2026",
-      color: "#D4831A",
-    },
-  ]
+  const projectsData = PROJECTS.map((project, index) => ({
+    id: index + 1,
+    title: project.title[language],
+    subtitle: project.subtitle[language],
+    image: project.image,
+    mobileImage: project.secondaryImage,
+    tags: project.tags,
+    caseStudyUrl: `/projects/${project.slug}`,
+    year: project.year,
+    color: project.color,
+  }))
 
   return (
     <section
