@@ -10,7 +10,7 @@ export default function MigafinaProjectPage() {
     ? {
         title: "Migafina",
         tagline: "Una experiencia de panadería digital diseñada para ||convertir, deleitar|| y destacar en cada detalle.",
-        altTagline: "A digital bakery experience built to convert, delight and stand out in every detail.",
+        altTagline: "De la vitrina al checkout, manteniendo el toque artesanal en cada pantalla.",
         marqueeText: "Hornear con pasión \u2717 Diseñar con propósito \u2717 Crear experiencias únicas",
         year: "2024",
         role: "Full-Stack Developer",
@@ -67,7 +67,7 @@ export default function MigafinaProjectPage() {
     : {
         title: "Migafina",
         tagline: "A digital bakery experience built to ||convert, delight|| and stand out in every detail.",
-        altTagline: "Una experiencia de panadería digital diseñada para convertir, deleitar y destacar en cada detalle.",
+        altTagline: "From the window display to checkout, keeping the artisanal touch on every screen.",
         marqueeText: "Bake with passion \u2717 Design with purpose \u2717 Create unique experiences",
         year: "2024",
         role: "Full-Stack Developer",

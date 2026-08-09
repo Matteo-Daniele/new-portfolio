@@ -68,6 +68,20 @@ export default function ProjectsPage() {
       color: "#1B5E99",
       category: language === "en" ? "Full-Stack App" : "Aplicación Full-Stack",
     },
+    {
+      id: 3,
+      title: "Gian Barber",
+      description: language === "en"
+        ? "Real-time barbershop management platform: barber cut tracking, admin approvals, split payments, per-barber shares and exportable stats on Supabase."
+        : "Plataforma de gestión de barbería en tiempo real: registro de cortes, aprobaciones del admin, pagos divididos, participación por barbero y estadísticas exportables sobre Supabase.",
+      image: "/images/admingian-app-desktop.png",
+      secondaryImage: "/images/admingian-app-mobile.png",
+      tags: ["Next.js", "Supabase", "TypeScript"],
+      caseStudyUrl: "/projects/gian-barber",
+      year: "2026",
+      color: "#D4831A",
+      category: language === "en" ? "Web App" : "Aplicación Web",
+    },
   ]
 
   return (
