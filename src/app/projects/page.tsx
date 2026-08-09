@@ -8,6 +8,7 @@ import { ArrowRight, ArrowUpRight, Mail } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef } from "react"
+import { PROJECTS } from "@/data/projects"
 
 export default function ProjectsPage() {
   const { language } = useLanguage()
@@ -39,50 +40,18 @@ export default function ProjectsPage() {
 
   const t = translations[language]
 
-  const allProjects = [
-    {
-      id: 1,
-      title: "Migafina",
-      description: language === "en" 
-        ? "Premium artisan bakery website with responsive design, smooth animations, and optimized performance for an elegant digital experience."
-        : "Sitio web premium de panadería artesanal con diseño responsivo, animaciones suaves y rendimiento optimizado para una experiencia digital elegante.",
-      image: "/images/migafina-desktop.png",
-      secondaryImage: "/images/migafina-mobile.png",
-      tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
-      caseStudyUrl: "/projects/migafina",
-      year: "2025",
-      color: "#D4831A",
-      category: language === "en" ? "Web Design" : "Diseño Web",
-    },
-    {
-      id: 2,
-      title: "Rent a Car",
-      description: language === "en"
-        ? "Full-stack vehicle reservation platform with real-time availability, admin dashboard, and seamless booking experience."
-        : "Plataforma full-stack de reservas de vehículos con disponibilidad en tiempo real, panel de administración y experiencia de reserva fluida.",
-      image: "/images/rentacar-desktop1.png",
-      secondaryImage: "/images/rentacar-desktop2.png",
-      tags: ["React.js", "Node.js", "MongoDB", "Express"],
-      caseStudyUrl: "/projects/rentacar",
-      year: "2024",
-      color: "#1B5E99",
-      category: language === "en" ? "Full-Stack App" : "Aplicación Full-Stack",
-    },
-    {
-      id: 3,
-      title: "Gian Barber",
-      description: language === "en"
-        ? "Real-time barbershop management platform: barber cut tracking, admin approvals, split payments, per-barber shares and exportable stats on Supabase."
-        : "Plataforma de gestión de barbería en tiempo real: registro de cortes, aprobaciones del admin, pagos divididos, participación por barbero y estadísticas exportables sobre Supabase.",
-      image: "/images/admingian-app-desktop.png",
-      secondaryImage: "/images/admingian-app-mobile.png",
-      tags: ["Next.js", "Supabase", "TypeScript"],
-      caseStudyUrl: "/projects/gian-barber",
-      year: "2026",
-      color: "#D4831A",
-      category: language === "en" ? "Web App" : "Aplicación Web",
-    },
-  ]
+const allProjects = PROJECTS.map((project, index) => ({
+    id: index + 1,
+    title: project.title[language],
+    description: project.description[language],
+    image: project.image,
+    secondaryImage: project.secondaryImage,
+    tags: project.tags,
+    caseStudyUrl: `/projects/${project.slug}`,
+    year: project.year,
+    color: project.color,
+    category: project.category[language],
+  }))
 
   return (
     <main className="min-h-screen" style={{ background: "var(--bg-main)" }}>
