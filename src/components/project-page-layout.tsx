@@ -31,6 +31,7 @@ export interface ProjectPageData {
   description: string
   altTagline?: string
   marqueeText?: string
+  videoId?: string
   challenge: ProjectSection
   approach: ProjectSection
   outcome: ProjectSection
@@ -138,6 +139,7 @@ export default function ProjectPageLayout({ data }: Props) {
       theStory: "The story",
       stack: "Tech stack",
       capabilities: "What this covers",
+      watchDemo: "Watch the demo",
       visit: "Live demo",
       code: "Source code",
       allProjects: "All projects",
@@ -150,6 +152,7 @@ export default function ProjectPageLayout({ data }: Props) {
       theStory: "La historia",
       stack: "Stack técnico",
       capabilities: "Qué cubre",
+      watchDemo: "Ver la demo",
       visit: "Demo en vivo",
       code: "Código fuente",
       allProjects: "Todos los proyectos",
@@ -276,6 +279,42 @@ export default function ProjectPageLayout({ data }: Props) {
             <Marquee text={marquee} ink />
           </div>
         </div>
+
+        {/* ── Demo video ── */}
+        {data.videoId && (
+          <section className="relative py-12 md:py-16 px-6 md:px-8">
+            <div className="max-w-4xl mx-auto">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="mb-8 flex items-center gap-3"
+              >
+                <span className="w-8 h-px" style={{ background: "#D4831A" }} />
+                <span className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#D4831A" }}>
+                  {tr.watchDemo}
+                </span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="relative aspect-video w-full overflow-hidden rounded-[2rem] shadow-2xl border border-white/30"
+              >
+                <iframe
+                  src={`https://www.youtube.com/embed/${data.videoId}`}
+                  title={`${data.title} demo`}
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </motion.div>
+            </div>
+          </section>
+        )}
 
         {/* ── Description (amber → sand body) ── */}
         <section className="relative py-16 md:py-24 px-6 md:px-8">

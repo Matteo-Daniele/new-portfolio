@@ -10,7 +10,7 @@ export default function RentacarProjectPage() {
     ? {
         title: "Rent a Car",
         tagline: "Una plataforma de gestión de flota construida para la ||eficiencia real|| de negocio.",
-        altTagline: "A fleet management platform built for real business efficiency.",
+        altTagline: "Reservá autos y controlá la flota desde un solo panel, con todo el flujo automatizado.",
         marqueeText: "Gestión inteligente \u2717 Reservas automatizadas \u2717 Control total de flota",
         year: "2024",
         role: "Full-Stack Developer",
@@ -68,7 +68,7 @@ export default function RentacarProjectPage() {
     : {
         title: "Rent a Car",
         tagline: "A fleet management platform built for ||real business|| efficiency.",
-        altTagline: "Una plataforma de gestión de flota construida para la eficiencia real de negocio.",
+        altTagline: "Book vehicles and run the whole fleet from a single panel, with everything automated.",
         marqueeText: "Smart management \u2717 Automated bookings \u2717 Total fleet control",
         year: "2024",
         role: "Full-Stack Developer",

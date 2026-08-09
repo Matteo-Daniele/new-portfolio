@@ -52,6 +52,17 @@ export default function Projects() {
       year: "2024",
       color: "#1B5E99",
     },
+    {
+      id: 3,
+      title: "Gian Barber",
+      subtitle: language === "en" ? "Barbershop management & revenue platform" : "Plataforma de gestión y ganancias de barbería",
+      image: "/images/admingian-app-desktop.png",
+      mobileImage: "/images/admingian-app-mobile.png",
+      tags: ["Next.js", "Supabase", "TypeScript"],
+      caseStudyUrl: "/projects/gian-barber",
+      year: "2026",
+      color: "#D4831A",
+    },
   ]
 
   return (
